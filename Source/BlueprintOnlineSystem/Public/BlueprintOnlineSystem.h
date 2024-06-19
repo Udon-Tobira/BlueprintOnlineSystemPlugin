@@ -7,9 +7,6 @@
 #include "FindSessionLatentAction.h"
 #include "JoinSessionLatentAction.h"
 #include "LoginLatentAction.h"
-// only for debugging
-#include "CoreMinimal.h"
-#include "LogOnlineSystem.h"
 #include "Modules/ModuleManager.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 
@@ -95,21 +92,4 @@ public:
 	    const APlayerController*             PlayerController,
 	    const FBlueprintSessionSearchResult& BlueprintSessionSearchResult,
 	    FString& ConnectInfo, EJoinSessionResult& JoinSessionResult);
-
-	// for debug!
-	UFUNCTION(BlueprintCallable)
-	void ServerTravel() {
-		const auto World = GetWorld();
-		check(World);
-
-		World->ServerTravel("/Game/MovieCreator/Levels/L_Filming?listen");
-	}
-
-	// for debug!
-	UFUNCTION(BlueprintCallable)
-	void ClientTravel(APlayerController* PlayerController,
-	                  const FString&     ConnectInfo) {
-		UE_LOG(LogOnlineSystem, Log, TEXT("Travel to %s"), *ConnectInfo);
-		PlayerController->ClientTravel(ConnectInfo, ETravelType::TRAVEL_Absolute);
-	}
 };

@@ -2,6 +2,8 @@
 
 #include "BlueprintOnlineSystem.h"
 
+#include "LogOnlineSystem.h"
+
 #define LOCTEXT_NAMESPACE "FBlueprintOnlineSystemModule"
 
 void FBlueprintOnlineSystemModule::StartupModule() {
