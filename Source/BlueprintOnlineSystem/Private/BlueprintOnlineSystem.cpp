@@ -26,37 +26,51 @@ void UBlueprintOnlineSystem::Initialize(FSubsystemCollectionBase& Collection) {
 }
 
 void UBlueprintOnlineSystem::Deinitialize() {
-	Super::Deinitialize();
+	[]() {
+		// get online subsystem
+		const auto OnlineSubsystem = IOnlineSubsystem::Get();
 
-	// get session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
-	check(OnlineSubsystem != nullptr);
+		// if OnlineSubsystem is nullptr
+		if (nullptr == OnlineSubsystem) {
+			// finish
+			return;
+		}
 
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
-	check(OnlineSessionInterface != nullptr);
+		// get session interface
+		const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
 
-	// if already destroyed
-	if (!OnlineSessionInterface->GetNamedSession(NAME_GameSession)) {
-		// finish
-		return;
-	}
+		// if OnlineSessionInterface is nullptr
+		if (nullptr == OnlineSessionInterface) {
+			// finish
+			return;
+		}
 
-	// log
-	UE_LOG(LogOnlineSystem, Log, TEXT("Try to destroy session"));
+		// if already destroyed
+		if (!OnlineSessionInterface->GetNamedSession(NAME_GameSession)) {
+			// finish
+			return;
+		}
 
-	// start destroying session
-	// fire and forget
-	const bool bDestroySessionSuccessfullyStarted =
-	    OnlineSessionInterface->DestroySession(NAME_GameSession);
-
-	// if failed to start destroying session
-	if (!bDestroySessionSuccessfullyStarted) {
 		// log
-		UE_LOG(LogOnlineSystem, Error, TEXT("Failed to start destroying session"));
+		UE_LOG(LogOnlineSystem, Log, TEXT("Try to destroy session"));
 
-		// finish
-		return;
-	}
+		// start destroying session
+		// fire and forget
+		const bool bDestroySessionSuccessfullyStarted =
+		    OnlineSessionInterface->DestroySession(NAME_GameSession);
+
+		// if failed to start destroying session
+		if (!bDestroySessionSuccessfullyStarted) {
+			// log
+			UE_LOG(LogOnlineSystem, Error,
+			       TEXT("Failed to start destroying session"));
+
+			// finish
+			return;
+		}
+	}();
+
+	Super::Deinitialize();
 }
 
 FName UBlueprintOnlineSystem::GetOnlineSubsystemName() const {
