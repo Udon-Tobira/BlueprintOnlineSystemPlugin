@@ -48,6 +48,9 @@ FFindSessionLatentAction::FFindSessionLatentAction(
 	// log
 	UE_LOG(LogOnlineSystem, Log, TEXT("searching session: %s"), *InSessionId);
 
+	// change state to running
+	IsRunning = true;
+
 	// start searching session
 	const bool bFindSessionsSuccessfullyStarted =
 	    OnlineSessionInterface->FindSessions(PlayerIndex, OnlineSessionSearch);
@@ -66,8 +69,6 @@ FFindSessionLatentAction::FFindSessionLatentAction(
 		FinishAsFailure();
 		return;
 	}
-
-	IsRunning = true;
 }
 
 void FFindSessionLatentAction::UpdateOperation(FLatentResponse& Response) {

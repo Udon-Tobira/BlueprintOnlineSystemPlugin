@@ -49,6 +49,9 @@ FCreateSessionLatentAction::FCreateSessionLatentAction(
 
 	UE_LOG(LogOnlineSystem, Log, TEXT("Try to create session"));
 
+	// change state to running
+	IsRunning = true;
+
 	// start creating session
 	const bool bCreateSessionSuccessfullyStarted =
 	    OnlineSessionInterface->CreateSession(PlayerIndex, NAME_GameSession,
@@ -68,8 +71,6 @@ FCreateSessionLatentAction::FCreateSessionLatentAction(
 		Finish(ECreateSessionResult::Failure);
 		return;
 	}
-
-	IsRunning = true;
 }
 
 void FCreateSessionLatentAction::UpdateOperation(FLatentResponse& Response) {

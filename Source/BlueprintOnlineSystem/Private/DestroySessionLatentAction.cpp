@@ -28,6 +28,9 @@ FDestroySessionLatentAction::FDestroySessionLatentAction(
 	// log
 	UE_LOG(LogOnlineSystem, Log, TEXT("Try to destroy session"));
 
+	// change state to running
+	IsRunning = true;
+
 	// start destroying session
 	const bool bDestroySessionSuccessfullyStarted =
 	    OnlineSessionInterface->DestroySession(NAME_GameSession);
@@ -46,8 +49,6 @@ FDestroySessionLatentAction::FDestroySessionLatentAction(
 		Finish(EDestroySessionResult::Failure);
 		return;
 	}
-
-	IsRunning = true;
 }
 
 void FDestroySessionLatentAction::UpdateOperation(FLatentResponse& Response) {

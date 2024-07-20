@@ -41,6 +41,9 @@ FJoinSessionLatentAction::FJoinSessionLatentAction(
 	// log
 	UE_LOG(LogOnlineSystem, Log, TEXT("Try to join session"));
 
+	// change state to running
+	IsRunning = true;
+
 	// start joining session
 	const bool bJoinSessionSuccessfullyStarted =
 	    OnlineSessionInterface->JoinSession(
@@ -61,8 +64,6 @@ FJoinSessionLatentAction::FJoinSessionLatentAction(
 		Finish(EJoinSessionResult::UnknownError);
 		return;
 	}
-
-	IsRunning = true;
 }
 
 void FJoinSessionLatentAction::UpdateOperation(FLatentResponse& Response) {

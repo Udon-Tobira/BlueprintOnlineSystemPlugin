@@ -48,6 +48,9 @@ FLoginLatentAction::FLoginLatentAction(
 	FOnlineAccountCredentials AccountCredentials;
 	AccountCredentials.Type = InAuthType;
 
+	// change state to running
+	IsRunning = true;
+
 	// start login
 	const bool bLoginSuccessfullyStarted =
 	    OnlineIdentityInterface->Login(PlayerIndex, AccountCredentials);
@@ -66,8 +69,6 @@ FLoginLatentAction::FLoginLatentAction(
 		Finish(ELoginResult::Failure);
 		return;
 	}
-
-	IsRunning = true;
 }
 
 void FLoginLatentAction::UpdateOperation(FLatentResponse& Response) {
