@@ -77,4 +77,4 @@ Clone this repository into the Plugins folder (or create your own if you don't h
 After installing the plugin using one of the above procedures, open the project (Press Yes when you see "The following modules are missing or built with a different engine version: RuntimeAssetImport") and the plugin is enabled.
 
 ## How to use
-Run [Blueprint Online System Plugin Sample]([https://github.com/Udon-Tobira/RuntimeAssImpSample](https://github.com/Udon-Tobira/BPOSPluginSample)).
+Run [Blueprint Online System Plugin Sample](https://github.com/Udon-Tobira/BPOSPluginSample).
