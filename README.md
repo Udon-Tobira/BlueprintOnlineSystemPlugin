@@ -69,7 +69,7 @@ Clone this repository into the Plugins folder (or create your own if you don't h
 2. In the Plugins folder of the project where you want to install this plug-in, start a command prompt.
 3. Execute  
    ```
-   git clone URL`
+   git clone URL
    ```
    Put the URL of this repository in the URL field.
 </details>
