@@ -6,6 +6,7 @@
 #include "Online/OnlineSessionNames.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
 
 FFindSessionLatentAction::FFindSessionLatentAction(
     const FLatentActionInfo& InLatentInfo,
@@ -19,11 +20,15 @@ FFindSessionLatentAction::FFindSessionLatentAction(
       CallbackTarget(InLatentInfo.CallbackTarget),
       BlueprintSessionSearchResult(OutBlueprintSessionSearchResult),
       Result(OutResult), SearchingSessionId(InSessionId) {
+	// get World
+	const auto World = InPlayerController.GetWorld();
+	check(World != nullptr);
+
 	// get session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
+	const auto OnlineSubsystem = Online::GetSubsystem(World);
 	check(OnlineSubsystem != nullptr);
 
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
+	OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
 	check(OnlineSessionInterface != nullptr);
 
 	// make search settings
@@ -89,13 +94,6 @@ void FFindSessionLatentAction::FinishAsFailure() {
 }
 
 void FFindSessionLatentAction::OnFindSessionsComplete(bool bWasSuccessful) {
-	// get online session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
-	check(OnlineSubsystem != nullptr);
-
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
-	check(OnlineSessionInterface != nullptr);
-
 	// unbind callback
 	OnlineSessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(
 	    OnFindSessionsCompleteDelegateHandle);

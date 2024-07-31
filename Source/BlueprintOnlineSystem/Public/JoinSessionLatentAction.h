@@ -65,6 +65,7 @@ private:
 	FName                      ExecutionFunction;
 	int32                      OutputLink;
 	FWeakObjectPtr             CallbackTarget;
+	IOnlineSessionPtr          OnlineSessionInterface;
 	FOnlineSessionSearchResult OnlineSessionSearchResult;
 	FString&                    ConnectInfo;
 	EJoinSessionResult&        Result;

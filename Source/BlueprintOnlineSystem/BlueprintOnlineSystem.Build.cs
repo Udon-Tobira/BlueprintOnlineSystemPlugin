@@ -26,6 +26,8 @@ public class BlueprintOnlineSystem : ModuleRules
             new string[]
             {
                 "Core",
+                "OnlineSubsystem",
+                "OnlineSubsystemUtils"
 				// ... add other public dependencies that you statically link with here ...
 			}
             );
@@ -38,7 +40,6 @@ public class BlueprintOnlineSystem : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "OnlineSubsystem"
 				// ... add private dependencies that you statically link with here ...	
 			}
             );

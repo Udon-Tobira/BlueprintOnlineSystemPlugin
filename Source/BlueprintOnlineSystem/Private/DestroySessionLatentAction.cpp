@@ -4,20 +4,26 @@
 
 #include "LogOnlineSystem.h"
 #include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
 
 FDestroySessionLatentAction::FDestroySessionLatentAction(
-    const FLatentActionInfo& InLatentInfo, EDestroySessionResult& OutResult)
+    const UObject& WorldContextObject, const FLatentActionInfo& InLatentInfo,
+    EDestroySessionResult& OutResult)
     : OnDestroySessionCompleteDelegate(
           FOnDestroySessionCompleteDelegate::CreateRaw(
               this, &FDestroySessionLatentAction::OnDestroySessionComplete)),
       ExecutionFunction(InLatentInfo.ExecutionFunction),
       OutputLink(InLatentInfo.Linkage),
       CallbackTarget(InLatentInfo.CallbackTarget), Result(OutResult) {
+	// get World
+	const auto World = WorldContextObject.GetWorld();
+	check(World != nullptr);
+
 	// get session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
+	const auto OnlineSubsystem = Online::GetSubsystem(World);
 	check(OnlineSubsystem != nullptr);
 
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
+	OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
 	check(OnlineSessionInterface != nullptr);
 
 	// set callback
@@ -64,13 +70,6 @@ void FDestroySessionLatentAction::Finish(
 
 void FDestroySessionLatentAction::OnDestroySessionComplete(
     FName SessionName, bool bWasSuccessful) {
-	// get online session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
-	check(OnlineSubsystem != nullptr);
-
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
-	check(OnlineSessionInterface != nullptr);
-
 	// unbind callback
 	OnlineSessionInterface->ClearOnDestroySessionCompleteDelegate_Handle(
 	    OnDestroySessionCompleteDelegateHandle);

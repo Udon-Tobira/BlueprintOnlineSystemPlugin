@@ -18,7 +18,8 @@ enum class EDestroySessionResult : uint8 {
  */
 class FDestroySessionLatentAction: public FPendingLatentAction {
 public:
-	FDestroySessionLatentAction(const FLatentActionInfo& InLatentInfo,
+	FDestroySessionLatentAction(const UObject&           WorldContextObject,
+	                            const FLatentActionInfo& InLatentInfo,
 	                            EDestroySessionResult&   OutResult);
 
 public:
@@ -45,5 +46,6 @@ private:
 	FName                  ExecutionFunction;
 	int32                  OutputLink;
 	FWeakObjectPtr         CallbackTarget;
+	IOnlineSessionPtr      OnlineSessionInterface;
 	EDestroySessionResult& Result;
 };

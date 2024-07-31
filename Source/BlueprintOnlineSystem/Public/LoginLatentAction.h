@@ -44,8 +44,9 @@ private:
 private:
 	bool IsRunning = false;
 
-	FName          ExecutionFunction;
-	int32          OutputLink;
-	FWeakObjectPtr CallbackTarget;
-	ELoginResult&  Result;
+	FName              ExecutionFunction;
+	int32              OutputLink;
+	FWeakObjectPtr     CallbackTarget;
+	IOnlineIdentityPtr OnlineIdentityInterface;
+	ELoginResult&      Result;
 };

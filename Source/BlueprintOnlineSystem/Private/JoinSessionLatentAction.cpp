@@ -5,6 +5,7 @@
 #include "LogOnlineSystem.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
 
 FJoinSessionLatentAction::FJoinSessionLatentAction(
     const FLatentActionInfo&             InLatentInfo,
@@ -19,11 +20,15 @@ FJoinSessionLatentAction::FJoinSessionLatentAction(
       OnlineSessionSearchResult(
           BlueprintSessionSearchResult.OnlineSessionSearchResult),
       ConnectInfo(OutConnectInfo), Result(OutResult) {
+	// get World
+	const auto World = InPlayerController.GetWorld();
+	check(World != nullptr);
+
 	// get session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
+	const auto OnlineSubsystem = Online::GetSubsystem(World);
 	check(OnlineSubsystem != nullptr);
 
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
+	OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
 	check(OnlineSessionInterface != nullptr);
 
 	// get local player
@@ -46,9 +51,8 @@ FJoinSessionLatentAction::FJoinSessionLatentAction(
 
 	// start joining session
 	const bool bJoinSessionSuccessfullyStarted =
-	    OnlineSessionInterface->JoinSession(
-	        PlayerIndex, NAME_GameSession,
-	        BlueprintSessionSearchResult.OnlineSessionSearchResult);
+	    OnlineSessionInterface->JoinSession(PlayerIndex, NAME_GameSession,
+	                                        OnlineSessionSearchResult);
 
 	// if failed to start joining session
 	if (!bJoinSessionSuccessfullyStarted) {
@@ -79,13 +83,6 @@ void FJoinSessionLatentAction::Finish(const EJoinSessionResult& InResult) {
 void FJoinSessionLatentAction::OnJoinSessionComplete(
     FName                              SessionName,
     EOnJoinSessionCompleteResult::Type OnJoinSessionCompleteResult) {
-	// get online session interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
-	check(OnlineSubsystem != nullptr);
-
-	const auto OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
-	check(OnlineSessionInterface != nullptr);
-
 	// unbind callback
 	OnlineSessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(
 	    OnJoinSessionCompleteDelegateHandle);

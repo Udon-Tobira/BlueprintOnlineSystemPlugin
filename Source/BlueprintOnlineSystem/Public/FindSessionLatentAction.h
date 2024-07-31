@@ -59,6 +59,7 @@ private:
 	EFindSessionResult&            Result;
 
 	// private field
+	IOnlineSessionPtr                OnlineSessionInterface;
 	const FString                    SearchingSessionId;
 	TSharedRef<FOnlineSessionSearch> OnlineSessionSearch =
 	    MakeShared<FOnlineSessionSearch>();

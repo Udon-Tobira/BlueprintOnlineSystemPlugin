@@ -6,6 +6,7 @@
 #include "LogOnlineSystem.h"
 #include "Misc/AssertionMacros.h"
 #include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
 
 FLoginLatentAction::FLoginLatentAction(
     const FLatentActionInfo& InLatentInfo,
@@ -16,6 +17,17 @@ FLoginLatentAction::FLoginLatentAction(
       ExecutionFunction(InLatentInfo.ExecutionFunction),
       OutputLink(InLatentInfo.Linkage),
       CallbackTarget(InLatentInfo.CallbackTarget), Result(OutResult) {
+	// get World
+	const auto World = InPlayerController.GetWorld();
+	check(World != nullptr);
+
+	// get online identity interface
+	const auto OnlineSubsystem = Online::GetSubsystem(World);
+	check(OnlineSubsystem != nullptr);
+
+	OnlineIdentityInterface = OnlineSubsystem->GetIdentityInterface();
+	check(OnlineIdentityInterface != nullptr);
+
 	// get local player
 	const auto LocalPlayer = InPlayerController.GetLocalPlayer();
 	check(LocalPlayer != nullptr);
@@ -24,12 +36,6 @@ FLoginLatentAction::FLoginLatentAction(
 	const auto PlayerIndex = LocalPlayer->GetLocalPlayerIndex();
 
 	// get login status
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
-	check(OnlineSubsystem != nullptr);
-
-	const auto OnlineIdentityInterface = OnlineSubsystem->GetIdentityInterface();
-	check(OnlineIdentityInterface != nullptr);
-
 	const auto LoginStatus = OnlineIdentityInterface->GetLoginStatus(PlayerIndex);
 
 	// if already logged in, return
@@ -85,13 +91,6 @@ void FLoginLatentAction::OnLoginComplete(int32               LocalUserNum,
                                          bool                bWasSuccessful,
                                          const FUniqueNetId& UserId,
                                          const FString&      Error) {
-	// get online identity interface
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
-	check(OnlineSubsystem != nullptr);
-
-	const auto OnlineIdentityInterface = OnlineSubsystem->GetIdentityInterface();
-	check(OnlineIdentityInterface != nullptr);
-
 	// unbind callback
 	OnlineIdentityInterface->ClearOnLoginCompleteDelegate_Handle(
 	    LocalUserNum, OnLoginCompleteDelegateHandle);

@@ -3,6 +3,7 @@
 #include "BlueprintOnlineSystem.h"
 
 #include "LogOnlineSystem.h"
+#include "OnlineSubsystemUtils.h"
 
 #define LOCTEXT_NAMESPACE "FBlueprintOnlineSystemModule"
 
@@ -26,9 +27,18 @@ void UBlueprintOnlineSystem::Initialize(FSubsystemCollectionBase& Collection) {
 }
 
 void UBlueprintOnlineSystem::Deinitialize() {
-	[]() {
+	[this]() {
+		// get World
+		const auto World = this->GetWorld();
+
+		// if World is nullptr
+		if (nullptr == World) {
+			// finish
+			return;
+		}
+
 		// get online subsystem
-		const auto OnlineSubsystem = IOnlineSubsystem::Get();
+		const auto OnlineSubsystem = Online::GetSubsystem(World);
 
 		// if OnlineSubsystem is nullptr
 		if (nullptr == OnlineSubsystem) {
@@ -74,8 +84,12 @@ void UBlueprintOnlineSystem::Deinitialize() {
 }
 
 FName UBlueprintOnlineSystem::GetOnlineSubsystemName() const {
+	// get World
+	const auto World = this->GetWorld();
+	check(World != nullptr);
+
 	// get online subsystem
-	const auto OnlineSubsystem = IOnlineSubsystem::Get();
+	const auto OnlineSubsystem = Online::GetSubsystem(World);
 	check(OnlineSubsystem != nullptr);
 
 	return OnlineSubsystem->GetSubsystemName();
@@ -134,7 +148,8 @@ void UBlueprintOnlineSystem::DestroySession(
 
 	LatentActionManager.AddNewAction(
 	    LatentActionInfo.CallbackTarget, LatentActionInfo.UUID,
-	    new FDestroySessionLatentAction(LatentActionInfo, DestroySessionResult));
+	    new FDestroySessionLatentAction(*WorldContextObject, LatentActionInfo,
+	                                    DestroySessionResult));
 }
 
 void UBlueprintOnlineSystem::FindSession(

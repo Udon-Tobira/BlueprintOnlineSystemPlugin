@@ -47,6 +47,7 @@ private:
 	FName                 ExecutionFunction;
 	int32                 OutputLink;
 	FWeakObjectPtr        CallbackTarget;
+	IOnlineSessionPtr     OnlineSessionInterface;
 	FString&              SessionId;
 	ECreateSessionResult& Result;
 };
