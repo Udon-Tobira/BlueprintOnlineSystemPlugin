@@ -8,7 +8,7 @@
 
 FCreateSessionLatentAction::FCreateSessionLatentAction(
     const FLatentActionInfo& InLatentInfo,
-    const APlayerController* InPlayerController, int32 MaxConnections,
+    const APlayerController& InPlayerController, int32 MaxConnections,
     FString& OutSessionId, ECreateSessionResult& OutResult)
     : OnCreateSessionCompleteDelegate(
           FOnCreateSessionCompleteDelegate::CreateRaw(
@@ -36,7 +36,7 @@ FCreateSessionLatentAction::FCreateSessionLatentAction(
 	OnlineSessionSettings.bUseLobbiesIfAvailable = false;
 
 	// get local player
-	const auto LocalPlayer = InPlayerController->GetLocalPlayer();
+	const auto LocalPlayer = InPlayerController.GetLocalPlayer();
 	check(LocalPlayer != nullptr);
 
 	// get index of player controller

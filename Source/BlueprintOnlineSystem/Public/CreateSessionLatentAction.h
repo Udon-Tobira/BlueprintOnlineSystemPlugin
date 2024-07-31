@@ -19,7 +19,7 @@ enum class ECreateSessionResult : uint8 {
 class FCreateSessionLatentAction: public FPendingLatentAction {
 public:
 	FCreateSessionLatentAction(const FLatentActionInfo& InLatentInfo,
-	                           const APlayerController* InPlayerController,
+	                           const APlayerController& InPlayerController,
 	                           int32 MaxConnections, FString& OutSessionId,
 	                           ECreateSessionResult& OutResult);
 

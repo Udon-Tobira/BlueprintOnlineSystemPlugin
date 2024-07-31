@@ -9,7 +9,7 @@
 
 FLoginLatentAction::FLoginLatentAction(
     const FLatentActionInfo& InLatentInfo,
-    const APlayerController* InPlayerController, const FString& InAuthType,
+    const APlayerController& InPlayerController, const FString& InAuthType,
     ELoginResult& OutResult)
     : OnLoginCompleteDelegate(FOnLoginCompleteDelegate::CreateRaw(
           this, &FLoginLatentAction::OnLoginComplete)),
@@ -17,7 +17,7 @@ FLoginLatentAction::FLoginLatentAction(
       OutputLink(InLatentInfo.Linkage),
       CallbackTarget(InLatentInfo.CallbackTarget), Result(OutResult) {
 	// get local player
-	const auto LocalPlayer = InPlayerController->GetLocalPlayer();
+	const auto LocalPlayer = InPlayerController.GetLocalPlayer();
 	check(LocalPlayer != nullptr);
 
 	// get index of player controller

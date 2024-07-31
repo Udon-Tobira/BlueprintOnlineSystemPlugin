@@ -22,7 +22,7 @@ class FFindSessionLatentAction: public FPendingLatentAction {
 public:
 	FFindSessionLatentAction(
 	    const FLatentActionInfo& InLatentInfo,
-	    const APlayerController* InPlayerController, const FString& InSessionId,
+	    const APlayerController& InPlayerController, const FString& InSessionId,
 	    FBlueprintSessionSearchResult& OutBlueprintSessionSearchResult,
 	    EFindSessionResult&            OutResult);
 

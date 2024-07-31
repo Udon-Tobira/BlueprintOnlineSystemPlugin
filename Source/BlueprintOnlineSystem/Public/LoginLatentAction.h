@@ -19,7 +19,7 @@ enum class ELoginResult : uint8 {
 class FLoginLatentAction: public FPendingLatentAction {
 public:
 	FLoginLatentAction(const FLatentActionInfo& InLatentInfo,
-	                   const APlayerController* InPlayerController,
+	                   const APlayerController& InPlayerController,
 	                   const FString& InAuthType, ELoginResult& OutResult);
 
 public:

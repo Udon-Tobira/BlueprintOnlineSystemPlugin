@@ -97,7 +97,7 @@ void UBlueprintOnlineSystem::Login(const UObject*           WorldContextObject,
 
 	LatentActionManager.AddNewAction(
 	    LatentActionInfo.CallbackTarget, LatentActionInfo.UUID,
-	    new FLoginLatentAction(LatentActionInfo, PlayerController, AuthType,
+	    new FLoginLatentAction(LatentActionInfo, *PlayerController, AuthType,
 	                           LoginResult));
 }
 
@@ -116,7 +116,7 @@ void UBlueprintOnlineSystem::CreateSession(
 
 	LatentActionManager.AddNewAction(
 	    LatentActionInfo.CallbackTarget, LatentActionInfo.UUID,
-	    new FCreateSessionLatentAction(LatentActionInfo, PlayerController,
+	    new FCreateSessionLatentAction(LatentActionInfo, *PlayerController,
 	                                   MaxConnections, SessionId,
 	                                   CreateSessionResult));
 }
@@ -153,7 +153,7 @@ void UBlueprintOnlineSystem::FindSession(
 
 	LatentActionManager.AddNewAction(
 	    LatentActionInfo.CallbackTarget, LatentActionInfo.UUID,
-	    new FFindSessionLatentAction(LatentActionInfo, PlayerController,
+	    new FFindSessionLatentAction(LatentActionInfo, *PlayerController,
 	                                 SessionId, BlueprintSessionSearchResult,
 	                                 FindSessionResult));
 }
@@ -174,7 +174,7 @@ void UBlueprintOnlineSystem::JoinSession(
 
 	LatentActionManager.AddNewAction(
 	    LatentActionInfo.CallbackTarget, LatentActionInfo.UUID,
-	    new FJoinSessionLatentAction(LatentActionInfo, PlayerController,
-	                                 BlueprintSessionSearchResult, ConnectInfo,
-	                                 JoinSessionResult));
+	    new FJoinSessionLatentAction(
+	        LatentActionInfo, *PlayerController, BlueprintSessionSearchResult,
+	        SessionConnectInfo, BeaconConnectInfo, JoinSessionResult));
 }

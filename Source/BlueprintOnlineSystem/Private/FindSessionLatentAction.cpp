@@ -9,7 +9,7 @@
 
 FFindSessionLatentAction::FFindSessionLatentAction(
     const FLatentActionInfo& InLatentInfo,
-    const APlayerController* InPlayerController, const FString& InSessionId,
+    const APlayerController& InPlayerController, const FString& InSessionId,
     FBlueprintSessionSearchResult& OutBlueprintSessionSearchResult,
     EFindSessionResult&            OutResult)
     : OnFindSessionsCompleteDelegate(FOnFindSessionsCompleteDelegate::CreateRaw(
@@ -34,7 +34,7 @@ FFindSessionLatentAction::FFindSessionLatentAction(
 	                                       EOnlineComparisonOp::Equals);
 
 	// get local player
-	const auto LocalPlayer = InPlayerController->GetLocalPlayer();
+	const auto LocalPlayer = InPlayerController.GetLocalPlayer();
 	check(LocalPlayer != nullptr);
 
 	// get index of player controller

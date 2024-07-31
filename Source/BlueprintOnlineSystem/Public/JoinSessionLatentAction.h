@@ -35,7 +35,7 @@ class FJoinSessionLatentAction: public FPendingLatentAction {
 public:
 	FJoinSessionLatentAction(
 	    const FLatentActionInfo&             InLatentInfo,
-	    const APlayerController*             InPlayerController,
+	    const APlayerController&             InPlayerController,
 	    const FBlueprintSessionSearchResult& BlueprintSessionSearchResult,
 	    FString& OutConnectInfo, EJoinSessionResult& OutResult);
 
