@@ -22,8 +22,8 @@ enum class EJoinSessionResult : uint8 {
 	/* The user attempting to join is
 	   already a member of the session */
 	AlreadyInSession,
-	/* There was an error in GetResolvedConnectString */
-	ErrorInGetResolvedConnectString,
+	/* There was an error in GetResolvedConnectString of SessionConnectInfo */
+	ErrorInGetResolvedConnectStringOfSession,
 	/* An error not covered above occurred */
 	UnknownError
 };
@@ -37,7 +37,8 @@ public:
 	    const FLatentActionInfo&             InLatentInfo,
 	    const APlayerController&             InPlayerController,
 	    const FBlueprintSessionSearchResult& BlueprintSessionSearchResult,
-	    FString& OutConnectInfo, EJoinSessionResult& OutResult);
+	    FString& OutSessionConnectInfo, FString& OutBeaconConnectInfo,
+	    EJoinSessionResult& OutResult);
 
 public:
 	// this function is called every frame to check if it has finished.
@@ -67,6 +68,7 @@ private:
 	FWeakObjectPtr             CallbackTarget;
 	IOnlineSessionPtr          OnlineSessionInterface;
 	FOnlineSessionSearchResult OnlineSessionSearchResult;
-	FString&                    ConnectInfo;
+	FString&                   SessionConnectInfo;
+	FString&                   BeaconConnectInfo;
 	EJoinSessionResult&        Result;
 };

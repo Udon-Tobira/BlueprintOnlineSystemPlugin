@@ -91,5 +91,6 @@ public:
 	    const UObject* WorldContextObject, FLatentActionInfo LatentActionInfo,
 	    const APlayerController*             PlayerController,
 	    const FBlueprintSessionSearchResult& BlueprintSessionSearchResult,
-	    FString& ConnectInfo, EJoinSessionResult& JoinSessionResult);
+	    FString& SessionConnectInfo, FString& BeaconConnectInfo,
+	    EJoinSessionResult& JoinSessionResult);
 };

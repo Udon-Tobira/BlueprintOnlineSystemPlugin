@@ -11,7 +11,8 @@ FJoinSessionLatentAction::FJoinSessionLatentAction(
     const FLatentActionInfo&             InLatentInfo,
     const APlayerController&             InPlayerController,
     const FBlueprintSessionSearchResult& BlueprintSessionSearchResult,
-    FString& OutConnectInfo, EJoinSessionResult& OutResult)
+    FString& OutSessionConnectInfo, FString& OutBeaconConnectInfo,
+    EJoinSessionResult& OutResult)
     : OnJoinSessionCompleteDelegate(FOnJoinSessionCompleteDelegate::CreateRaw(
           this, &FJoinSessionLatentAction::OnJoinSessionComplete)),
       ExecutionFunction(InLatentInfo.ExecutionFunction),
@@ -19,7 +20,8 @@ FJoinSessionLatentAction::FJoinSessionLatentAction(
       CallbackTarget(InLatentInfo.CallbackTarget),
       OnlineSessionSearchResult(
           BlueprintSessionSearchResult.OnlineSessionSearchResult),
-      ConnectInfo(OutConnectInfo), Result(OutResult) {
+      SessionConnectInfo(OutSessionConnectInfo),
+      BeaconConnectInfo(OutBeaconConnectInfo), Result(OutResult) {
 	// get World
 	const auto World = InPlayerController.GetWorld();
 	check(World != nullptr);
@@ -107,21 +109,43 @@ void FJoinSessionLatentAction::OnJoinSessionComplete(
 		return;
 	}
 
-	// get connect string
-	const bool bSuccessfullyGetConnectInfo =
+	// get connect string of session
+	const bool bSuccessfullyGetConnectInfoOfSession =
 	    OnlineSessionInterface->GetResolvedConnectString(NAME_GameSession,
-	                                                     ConnectInfo);
+	                                                     SessionConnectInfo);
 
-	// if failed to get connect info
-	if (!bSuccessfullyGetConnectInfo) {
+	// if failed to get connect info of session
+	if (!bSuccessfullyGetConnectInfoOfSession) {
 		// finish
-		Finish(EJoinSessionResult::ErrorInGetResolvedConnectString);
+		Finish(EJoinSessionResult::ErrorInGetResolvedConnectStringOfSession);
 		return;
 	}
 
-	// log connect string
-	UE_LOG(LogOnlineSystem, Log, TEXT("JoinSession success. Connect Info: %s"),
-	       *ConnectInfo);
+	// log connect string of session
+	UE_LOG(LogOnlineSystem, Log,
+	       TEXT("JoinSession success. Connect Info of session: %s"),
+	       *SessionConnectInfo);
+
+	// get connect string of beacon
+	const bool bSuccessfullyGetConnectInfoOfBeacon =
+	    OnlineSessionInterface->GetResolvedConnectString(
+	        OnlineSessionSearchResult, NAME_BeaconPort, BeaconConnectInfo);
+
+	// if success to get connect info of beacon
+	if (bSuccessfullyGetConnectInfoOfBeacon) {
+		// log connect string of beacon
+		UE_LOG(LogOnlineSystem, Log, TEXT("Connect Info of beacon: %s"),
+		       *BeaconConnectInfo);
+	}
+	// if failed to get connect info of beacon
+	else {
+		// warn that you failed to get connect info of beacon
+		UE_LOG(LogOnlineSystem, Warning,
+		       TEXT("Failed to get connect info of beacon."));
+
+		// set BeaconConnectInfo string to empty string
+		BeaconConnectInfo = "";
+	}
 
 	// finish
 	Finish(EJoinSessionResult::Success);

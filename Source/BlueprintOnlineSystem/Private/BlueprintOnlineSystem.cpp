@@ -177,7 +177,8 @@ void UBlueprintOnlineSystem::JoinSession(
     const UObject* WorldContextObject, FLatentActionInfo LatentActionInfo,
     const APlayerController*             PlayerController,
     const FBlueprintSessionSearchResult& BlueprintSessionSearchResult,
-    FString& ConnectInfo, EJoinSessionResult& JoinSessionResult) {
+    FString& SessionConnectInfo, FString& BeaconConnectInfo,
+    EJoinSessionResult& JoinSessionResult) {
 	check(WorldContextObject != nullptr);
 	check(PlayerController != nullptr);
 
