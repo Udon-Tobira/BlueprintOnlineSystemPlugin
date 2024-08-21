@@ -40,7 +40,7 @@ FLoginLatentAction::FLoginLatentAction(
 
 	// if already logged in, return
 	if (ELoginStatus::LoggedIn == LoginStatus) {
-		UE_LOG(LogOnlineSystem, Warning, TEXT("Already logged in"));
+		UE_LOG(LogOnlineSystem, Display, TEXT("Already logged in"));
 		Finish(ELoginResult::Success);
 		return;
 	}
